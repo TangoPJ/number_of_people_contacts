@@ -61,6 +61,7 @@ def search_persons(per, ids):
 
     return list(sorted(output, key=lambda x: x["Number of contacts"], reverse=True))
 
+
 def write__to_excel(data, file):
     df = pd.DataFrame.from_dict(data)
     df.to_excel(file)
