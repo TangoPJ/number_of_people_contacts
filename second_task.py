@@ -1,24 +1,23 @@
 import json
 from collections import Counter
 import datetime
+import pandas as pd
 
 
-def read_data_from_file(file):
-    """This function reads data from JSON file
+def read_json(path):
+    """Loads JSON from a fileclear
 
-    :param file: contains the absolute path to the JSON file
-    :return: The json object. A JSON object contains data in the form of key/value pair.
-    The keys are strings and the values are the JSON types
-
+   :param path: absolute path to a JSON file
+   :return: data, containing JSON data
     """
 
-    with open(file, encoding='utf8') as f:
+    with open(path, encoding='utf8') as f:
         contacts = json.load(f)
     return contacts
 
 
 def is_valid_contact(s_to, s_from):
-    """This function checks the time difference of 5 minutes or more
+    """Checks the time difference of 5 minutes or more
 
     :param s_to: Initial contact time
     :param s_from: Finish contact time
@@ -33,8 +32,8 @@ def is_valid_contact(s_to, s_from):
 
 
 # counting persons
-def counting_persons(data):
-    """This function counts the number of contacts of each person
+def count_persons(data):
+    """Counts the number of contacts of each person
 
     :param data: data of people in JSON format
     :return: dictionary of people, key(str)=ID, value(int)=Number of contacts
@@ -46,11 +45,36 @@ def counting_persons(data):
     return dict(sorted(general_number.items(), key=lambda x: x[1], reverse=True))
 
 
+def search_persons(per, ids):
+    """ Searches persons by ID from small_data_persons.json
+
+    :param per data of persons
+    :param ids: data of IDs
+    :return: list of dicts
+    """
+
+    output = []
+    for key, value in ids.items():
+        for i in per:
+            if key == i['ID']:
+                output.append({"Name": i["Name"], "ID": key, "Number of contacts": value})
+
+    return list(sorted(output, key=lambda x: x["Number of contacts"], reverse=True))
+
+def write__to_excel(data, file):
+    df = pd.DataFrame.from_dict(data)
+    df.to_excel(file)
+
+
 def main():
     contacts_data = 'small_data_contacts.json'
+    persons_data = 'small_data_persons.json'
+    result = 'result.xlsx'
 
-    contacts = read_data_from_file(contacts_data)
-    print(counting_persons(contacts))
+    contacts = read_json(contacts_data)
+    persons = read_json(persons_data)
+
+    write__to_excel(search_persons(persons, count_persons(contacts)), result)
 
 
 if __name__ == '__main__':
