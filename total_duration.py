@@ -21,7 +21,8 @@ def count_time(data):
 
     for value in data:
         result[value['Member1_ID']] += value['Total_time']
-
+        result[value['Member2_ID']] += value['Total_time']
+        
     return dict(result)
 
 
@@ -54,6 +55,7 @@ def main():
     wf = search_persons(persons, count_time(contacts))
 
     second_task.write__to_excel(wf, file)
+    print(count_time(contacts))
 
 
 if __name__ == '__main__':
