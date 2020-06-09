@@ -31,7 +31,6 @@ def is_valid_contact(s_to, s_from):
     return time_date_to - time_date_from >= datetime.timedelta(minutes=5)
 
 
-# counting persons
 def count_persons(data):
     """Counts the number of contacts of each person
 
